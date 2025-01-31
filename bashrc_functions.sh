@@ -7,12 +7,22 @@ historyg() {
 }
 
 historyx() {
-    local cmd_num=$1
-    if [[ -z "$cmd_num" ]]; then
-        echo "Usage: populate_command <history_number>"
+    if [[ -z "$1" ]]; then
+        echo "Usage: historyx <history_number>"
         return 1
     fi
-    # Retrieve the command from history and insert it into the prompt
-    READLINE_LINE=$(history | awk -v num="$cmd_num" '$1 == num {sub(/^[0-9]+[[:space:]]*/, "", $0); print $0}')
-    READLINE_POINT=${#READLINE_LINE}
+
+    # Extract command from history
+    local cmd=$(history | awk -v num="$1" '$1 == num {sub(/^[0-9]+[[:space:]]*/, "", $0); print $0}')
+
+    # If command found, populate it in the prompt
+    if [[ -n "$cmd" ]]; then
+        echo "$cmd"  # Show the command
+        READLINE_LINE="$cmd"  # Populate it in the command prompt
+        READLINE_POINT=${#cmd}  # Move cursor to end
+    else
+        echo "No command found for history number $1"
+        return 1
+    fi
 }
+
