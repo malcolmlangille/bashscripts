@@ -48,20 +48,20 @@ export PATH="/idea-server/bin:$PATH"
 # Source the Git prompt script from the specified location.
 . /usr/share/git-core/contrib/completion/git-prompt.sh
 
-# Define color variables
-GREEN="\[\e[01;32m\]"
-DARK_GREEN="\[\e[0;32m\]"
-YELLOW="\[\e[01;33m\]"
-RESET="\[\e[00m\]"
-
 # Function to format the working directory path with different colors for slashes and text
 colored_w() {
-    local path=$(echo $PWD | sed "s/\//${DARK_GREEN}\/${GREEN}/g")
-    echo -e "${GREEN}${path}${RESET}"
+    # This uses parameter expansion to substitute all slashes with color-coded slashes
+    echo "${PWD//\//\[\e[0;32m\]\/\[\e[01;32m\]}"
 }
 
+# Define color variables
+RESET="\[\e[0m\]"
+GREEN="\[\e[01;32m\]"
+YELLOW="\[\e[01;33m\]"
+
 # Customize the PS1 prompt
-PS1='\$(colored_w)\$(__git_ps1 " (${YELLOW}%s${RESET})") \$ '
+PS1='${GREEN}$(colored_w)${RESET}$(__git_ps1 " (${YELLOW}%s${RESET})") \$ '
+
 
 
 
