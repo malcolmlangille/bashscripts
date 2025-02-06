@@ -48,24 +48,22 @@ export PATH="/idea-server/bin:$PATH"
 # Source the Git prompt script from the specified location.
 . /usr/share/git-core/contrib/completion/git-prompt.sh
 
-# Define color variables.
-GREEN="\[\033[01;32m\]"       # Bright green for folder names.
-DARK_GREEN="\[\033[0;32m\]"   # Dark green for the "/" separators.
-YELLOW="\[\033[01;33m\]"      # Yellow for Git branch name.
-RESET="\[\033[00m\]"
+# Define color variables
+GREEN="\[\e[01;32m\]"
+DARK_GREEN="\[\e[0;32m\]"
+YELLOW="\[\e[01;33m\]"
+RESET="\[\e[00m\]"
 
-# Define a function that outputs the full working directory with
-# "/" replaced by dark green and folder names in bright green.
+# Function to format the working directory path with different colors for slashes and text
 colored_w() {
-    # Prepend bright green color and then replace every "/" with
-    # dark green "/" followed by bright green again.
-    echo "${GREEN}${PWD//\//${DARK_GREEN}/${GREEN}}"
+    local path=$(echo $PWD | sed "s/\//${DARK_GREEN}\/${GREEN}/g")
+    echo -e "${GREEN}${path}${RESET}"
 }
 
-# Customize the PS1 prompt:
-# - $(colored_w) calls our function to display the colored full path.
-# - __git_ps1 adds the current Git branch (if available).
-export PS1="\$(colored_w)${RESET}\$(__git_ps1 ' (${YELLOW}%s${RESET})') \$ "
+# Customize the PS1 prompt
+PS1='\$(colored_w)\$(__git_ps1 " (${YELLOW}%s${RESET})") \$ '
+
+
 
 
 
