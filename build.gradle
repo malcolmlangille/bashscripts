@@ -1,47 +1,63 @@
 // File: build.gradle
+
 plugins {
-    // Apply the Java plugin
     id 'java'
-    // Apply the Gradle XJC plugin for generating Java classes from XSD
-    id 'org.unbroken-dome.xjc' version '2.0.0'
 }
 
 repositories {
+    // Replace with your Nexus repository URL (if required)
+    maven {
+        url "https://your.nexus.repo/repository/maven-public/"
+    }
+    // Fallback to Maven Central if needed
     mavenCentral()
 }
 
+// Define a configuration to hold JAXB-related dependencies
+configurations {
+    jaxb
+}
+
 dependencies {
-    // Jackson XML dependency for XML mapping
+    // Dependency for Jackson XML mapping
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2'
+
+    // JAXB dependencies needed to run the xjc tool (using GlassFish JAXB RI)
+    jaxb 'org.glassfish.jaxb:jaxb-xjc:3.0.2'
+    jaxb 'org.glassfish.jaxb:jaxb-core:3.0.2'
+    jaxb 'org.glassfish.jaxb:jaxb-runtime:3.0.2'
 }
 
-// Configure the XJC plugin to generate classes from your XSD
-xjc {
-    // Define a task named 'xjcGenerate' (the default) for generating Java sources
-    xjcGenerate {
-        // Specify the XSD file you want to use for code generation.
-        // You can also point to a directory if you have multiple XSD files.
-        source = file('src/main/resources/your-schema.xsd')
+// Define a custom task to generate Java classes from your XSD using JAXB xjc
+task generateJaxb(type: JavaExec) {
+    description = "Generate Java classes from XSD using the JAXB XJC tool from the Nexus repository"
+    group = "build"
 
-        // Specify the package name for the generated classes.
-        packageName = 'com.example.generated'
+    // Set the classpath to include all JAXB dependencies from the 'jaxb' configuration
+    classpath = configurations.jaxb
 
-        // Define where the generated Java source files should be placed.
-        outputDirectory = file("$buildDir/generated/xjc")
-    }
+    // Specify the main class for the xjc tool
+    mainClass.set('com.sun.tools.xjc.XJCFacade')
+
+    // Arguments for xjc:
+    //   -d : output directory for generated sources
+    //   -p : package name for the generated classes
+    //   The last argument is the path to your XSD file.
+    args '-d', "$buildDir/generated/jaxb",
+         '-p', 'com.example.generated',
+         'src/main/resources/your-schema.xsd'
 }
 
-// Make sure the generated sources are included in the main source set.
+// Add the generated sources directory to the main source set
 sourceSets {
     main {
         java {
-            srcDir "$buildDir/generated/xjc"
+            srcDir "$buildDir/generated/jaxb"
         }
     }
 }
 
-// Optionally, you can have the 'compileJava' task depend on the xjc generation task.
-// This ensures that XSDs are processed before compilation.
+// Ensure the JAXB generation runs before compiling Java sources
 compileJava {
-    dependsOn xjcGenerate
+    dependsOn generateJaxb
 }
