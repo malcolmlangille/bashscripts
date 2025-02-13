@@ -12,3 +12,10 @@ bootRun {
         'keycloak.migration.usersExportStrategy': 'REALM_FILE'
     ]
 }
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/customdb;DB_CLOSE_ON_EXIT=false;AUTO_SERVER=TRUE
+    username: sa
+    password:
+
