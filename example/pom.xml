@@ -24,4 +24,31 @@
             <type>jar</type>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.7</version>
+                <configuration>
+                    <!-- Use a flatten mode that doesn’t include everything from the effective POM -->
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    <!-- Do not merge the dependencyManagement section -->
+                    <updateDependencyManagement>false</updateDependencyManagement>
+                    <!-- Keep dependency updates enabled so that versions are inlined -->
+                    <updateDependencies>true</updateDependencies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
