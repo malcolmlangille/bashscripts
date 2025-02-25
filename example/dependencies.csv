@@ -1,0 +1,3 @@
+groupId,artifactId,version,scope,type
+com.example,sample-project,1.0-SNAPSHOT,compile,jar
+junit,junit,4.13.2,test,jar
