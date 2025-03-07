@@ -1,0 +1,297 @@
+"The code in a finally clause will never fail to execute, right?","try {
+    if (choice) {
+      while (true) ;
+    } else {
+      System.exit(1);
+    }
+  } finally {
+    code.to.cleanup();
+  }"
+Abstract Class,Cannot be instantiated. Methods can be concreate or abstract inside an abstract class. Used for inheritance.
+Abstract Method,An empty method that must be overridden.
+Static Variables,Class variable all instances share the same copy of the variable.
+Static Methods,Class methods used without creating an instance
+Factory,Creates objects without specifying the exact class to create
+Singleton,Restricts object creation to only one instance
+Adapter,Allows incompatible interfaces to work by wrapping its own interface
+Façade,Provides a simplified interface for a large body of code
+Command,creates objects which encapsulate actions and parameters
+MVC,Model/View/Controller
+DTO,Data transfer object
+DAO,Uniform interface to access multiple datasource types
+REST,"Representation State Transfer (REST) Any resource can be identified by a URL. Simple operations fia HTTP API (GET,POST,PUT,DELETE) Payload is form data"
+Java Bean,Serializable java class. A public no argument constructor. Properties are private and accessable through getters and setters.
+Spring DI,Covered
+Spring AOP,Covered
+Spirng and Hibernate,Partial
+Spring MVC,Not yet
+Big O notation,"Describe the performance or complexity of an algorithm. 
+O(1)  Always execute in the same time regardless of the data set.
+O(N)  describes an algorithm whose performance will grow linearly 
+      and in direct proportion to the size of the input data set.
+      i.e matching a string in a set (alway represents worst case)
+O(N2) represents an algorithm whose performance is directly 
+      proportional to the square of the size of the input data set.
+      i.e nested iterations
+O(2N) denotes an algorithm whose growth will double with each 
+      additional element in the input data set. 
+      i.e double with each additional element in the input data set"
+Fibonacci Sequence,"public class Fibonacci {
+   public static int fib(int n) {
+      if (n < 2) {
+         return n;
+      } else {
+      return fib(n-1)+fib(n-2);
+      }
+  }
+
+  public static void main(String[] args) {
+    for (int i=0; i<=46; i++)
+        System.out.print(fib(i)+"", "");
+  }
+}"
+Interface vs Abstract Class,Abstract can have instance methods that have default behavior. Interfaces can only have constants and instance methods. 
+Interface,An Interface is nothing but a contract as to how a class should behave
+Stack,Memory for thread of execution. When a function is called a block is reserved on the top of the stack for local variables and some bookkeeping data. When function is returned the block becomes unused. Ths stack is always reservced LIFO. Each thread gets a stack. 
+Heap,Heap is memory set aside for dynamic allocation. Typically only one heap for the application.
+Arrays,"String[] myStringArray = new String[3];
+String[] myStringArray = {""a"",""b"",""c""};
+String[] myStringArray = new String[]{""a"",""b"",""c""};"
+Syncronize,Methods and blocks
+Threads,Implement runnable or inheariting from Thread class.
+Access Modifiers,"public : Public class is visible in other packages, field is visible everywhere (class must be public too)"
+,"private : Private variables or methods may be used only by an instance of the same class that declares the variable or method, A private feature may only be accessed by the class that owns the feature."
+,protected : Is available to all classes in the same package and also available to all subclasses of the class that owns the protected feature.This access is provided even to subclasses that reside in a different package from the class that owns the protected feature.
+,"default :What you get by default ie, without any access modifier (ie, public private or protected).It means that it is visible to all within a particular package."
+Final Class,Final class can't be extended
+Final Method,Final method can't be overridden
+Polymorphism,"Polymorphism allows you to create a subclass of an existing class and redefine how a method works, so that when the method is called by other code (or even the super class's code) your method is executed instead. (Many Forms)"
+Import same package twice,The first in the classpath wins
+Checked exception vs Unchecked,Programmers deal with checked exceptions
+Overriding,"Class defines a method using the same name, return type, and arguments as its superclass"
+Anonymous Classes,"Anonymous inner classes extend local inner classes one level further. As anonymous classes have no name, you cannot provide a constructor."
+Encapsulation,Encapsulation is the mechanism that binds together code and data it manipulates and keeps both safe from outside interference and misuse.
+"What is final, finalize() and finally?","final : final keyword can be used for class, method and variables. A final class cannot be subclassed and it prevents other programmers from subclassing a secure class to invoke insecure methods. A final method can’t be overridden. A final variable can’t change from its initialized value. finalize() : finalize() method is used just before an object is destroyed and can be called just prior to garbage collection. finally : finally, a key word used in exception handling, creates a block of code that will be executed after a try/catch block has completed and before the code following the try/catch block. The finally block will execute whether or not an exception is thrown. For example, if a method opens a file upon exit, then you will not want the code that closes the file to be bypassed by the exception-handling mechanism. This finally keyword is designed to address this contingency."
+GC,When an object is no loger referred to by any variable the GC will reclaim the memory.
+Transient,Not serialized
+Volatile,May change unexpectedly by other parts of the program
+Overloading,Same method different arguments
+Overriding,Blocks inheritance from the superclass
+Inheritance,inheriting all features from another class. Helps in code reuse
+Inner class,Defined in other classes
+Reflection,Can analyze code at runtime
+Thread,"ready, running, waiting and dead"
+Syncronization,Ensures only one thread can access a given resource
+Testing,(At)Test AssertNotNull AssertEquals
+Dependency Injection (Inversion of control),Reduced code. More testable by switching implementations. Loose coupling.
+Spring,Address complexity of enterprise applications. Selective about components. Includes dependency injection. No vendor lock-in.
+,"DI, AOP, Container, MVC, Transaction, JDBC Exception Handling"
+Types of dependency injection,Setter and constructor
+BeanFactory,Holds a collection of beans. Instantiates beans when asked. Controls bean lifecycle. Can create associations between beans when they are instantiated.
+ApplicationContext,"Is a BeanFactory with message resolution (internationalization), a generic way to load file resources, events to beans that are registered as listeners"
+Implementations of ApplciationContext,"ClassPathXmlApplicationContext(""spring.xml"")"
+Coding for interfaces,
+Spring can autowire relationships,"no, byName, byType, constructor, autodirect"
+Spring and Hibernate,Spring can inject a hibernate SessionFactory
+Bean Scopes,
+singleton,Scopes a single bean definition to a single object instance per Spring IoC container.
+prototype,Scopes a single bean definition to any number of object instances.
+request,Scopes a single bean definition to the lifecycle of a single HTTP request; that is each and every HTTP request will have its own instance of a bean created off the back of a single bean definition. Only valid in the context of a web-aware Spring ApplicationContext.
+session,Scopes a single bean definition to the lifecycle of a HTTP Session. Only valid in the context of a web-aware Spring ApplicationContext.
+global session,Scopes a single bean definition to the lifecycle of a global HTTP Session. Typically only valid when used in a portlet context. Only valid in the context of a web-aware Spring ApplicationContext.
+Aspect-oriented programming,Modularize crosscuting concerns (logging and transactions)
+JoinPoint,Spring AOP method execution
+Advice,"Action taken with the following actions Around, Before, After, After Returning, After Throwing, After Finally"
+Difference between EJB and Spring,EJB
+Transaction management,Must use a JTA transaction manager.
+,Supports transactions that span remote method calls.
+Declarative transaction support,Can define transactions declaratively through the deployment descriptor.
+,Can define transaction behavior per method or per class by using the wildcard character *.
+,Cannot declaratively define rollback behavior—this must be done programmatically.
+Persistence,Supports programmatic bean-managed persistence and declarative container managed persistence.
+Declarative security,Supports declarative security through users and roles. The management and implementation of users and roles is container specific.
+,Declarative security is configured in the deployment descriptor.
+Distributed computing,Provides container-managed remote method calls.
+,Spring
+,"Supports multiple transaction environments through its PlatformTransactionManagerinterface, including JTA, Hibernate, JDO, and JDBC."
+,Does not natively support distributed transactions—it must be used with a JTA transaction manager.
+,Can define transactions declaratively through the Spring configuration file or through class metadata.
+,Can define which methods to apply transaction behavior explicitly or by using regular expressions.
+,Can declaratively define rollback behavior per method / exception type.
+,"Provides a framework for integrating with several persistence technologies, including JDBC, Hibernate, JDO, and iBATIS."
+,No security implementation out-of-the box.
+,"Acegi, an open source security framework built on top of Spring, provides declarative security through the Spring configuration file or class metadata."
+,"Provides proxying for remote calls via RMI, JAX-RPC, and web services."
+Operators,When first part of operator is true short circuit occurs. Second not run
+Anonymous Classes,new ActionListener() { public void actionPerformed(Action e) {}};
+Thread Methods,start() and Run()
+When will a thread stop,Thread higher priority becores runnable. The stop method is called
+"notifyAll(),wait() and notify()",Within synchronized context
+Abstract Class,abstract class doesn't have to implement any or all of its interface's 
+Switch,Watch for break statements
+"Practice Switch, loops, structures",
+Subclass instance,Foo.Bar b = f.new Bar();
+Default constructors,Have the same access as their class. If the class declars no constructors the compiler generates a default no-arg constructor.
+Floating point number,Cast to int will lose digits after decimal
+Byte,Long can be cast to byte. If over 127 it loses its most significant leftmost bits.
+Byte,A long can store a byte as it's smaller
+>>>,unsigned shift operator
+Arrays,All arrays in java are zero based
+Assertions,Should be free of side effects as they may get disabled
+Types,Reference varaibles of different types refering to the same object will always be equal
+Bitwise,"bitwise AND &
+bitwise exclusive OR ^
+bitwise inclusive OR |"
+Ternary,? :
+% ,Remainder operator
+Increment,++c or c++ are the same except in expression. In an expression ++c evaluates to the incremented value where c++ evaluates to the original value
+Defaul Access,package oriented access modifier
+Switch,Case expressions must be constant. If not final the compiler will fail
+null,null not NULL
+Assertions,When assertion error program halts when running with the -ea option
+,Can be enabled or disabled on a class by class basis
+Interface Methods,Must be public. Cannot be static
+Short circuits ,When first part of operator is false short circuit occurs
+Finally,Finally will execute before an exception is populated
+Hashcode,Not required to return a positive int
+New,new Object() {}; must end in semicolon
+Threads,wait() causes current thread to wait until another thread invokes notify() or notifyAll()
+,"Object defines wait(), notify(), and notifyAll() methods"
+,Extend thread and override run method
+,Implement runnable and override run method
+,The run method must be public
+Application arguments,0 based
+Math.random(),Returns double >0 and <1
+Default Constructor,If constructor exists the default one doesn't exist
+Equals and Hashcode,o1.equals(o2) then o1.hashCode() == o2.hashCode() must be true
+,If equals is true then hash code must be equal. If hash code is equal the objects may not be equal.
+,Unequal objects need not produce distinct hash codes
+AssertionError,If assertion error occurs in try finally block will still run
+Assertion,Should never be handled by try catch
+,Sometimes you should sill throw assertion error if disabled
+Equals,Fails if object classes are different
+String Concatanation,If operands are numeric add. If one is string concat.
+Default Constructor,If super has constructor it must be called as not default exists.
+Classes,Nonnested classes cannot be marked protected or final
+java.lang.Error,Exception is not a superclass of Error
+Threads,"Methods of object notify(), notifyAll(), wait(long msecs)"
+,notify() wakes up a thread but doesn't stop it
+Math.abs(),Return value is always the same as the parameter passed to it
+"String x = new String(""xyz"")",Creates two string objects
+Not possible to get sqrt of negative,NaN
+Map,Cannot contain duplicates
+How to sort a collection,
+Char is an int,0 to 65535
+Runtime Arguments,Disable or enable assertions
+Sorting,ArrayList arrayList = new ArrayList();
+,"arrayList.add(""A""); arrayList.add(""B"")"
+,Comparator comparator = Collections.reverseOrder();
+,"Collections.sort(arrayList, comparator);"
+Type,Contains / Size / Range
+boolean,true or false / 1 bit / NA
+char,Unicode character / 16 bits / \u0000 to \uFFFF
+byte,Signed integer / 8 bits / -128 to 127
+short,Signed integer / 16 bits / -32768 to 32767
+int,Signed integer / 32 bits / -2147483648 to 2147483647
+long,Signed integer / 64 bits / -9223372036854775808 to 9223372036854775807
+float,IEEE 754 floating point / 32 bits / ±1.4E-45 to ±3.4028235E+38
+double,IEEE 754 floating point / 64 bits / ±4.9E-324 to ±1.7976931348623157E+308
+Annotations,public @interface License {
+,        String value();
+,}
+,
+,"@License(""GPL"")"
+,public class MyGPLLicensedClass { ... }
+Enums, public enum Color {
+,"   WHITE, BLACK, RED, YELLOW, BLUE"
+, }
+,
+,public enum Color {
+," WHITE(21), BLACK(22), RED(23), YELLOW(24), BLUE(25);"
+,
+, private int code;
+,
+, private Color(int c) {
+,   code = c;
+, }
+,
+, public int getCode() {
+,   return code;
+, }}
+,Enum constructor cannot be public or protected
+Sort a byte array,"byte[] b2 = new byte[]{5,2,3,1,4};"
+,"Arrays.sort(b2,1,4);"
+For,"ArrayList<String> arrayList = new ArrayList<String>();
+for (String string : arrayList) {}"
+StringTokenizer,"StringTokenizer st = new StringTokenizer(""J|S|Example 1"",""|"", true);
+while(st.hasMoreTokens()) {System.out.println(st.nextToken(""|""));}"
+Read CSV,"BufferedReader br = new BufferedReader( new FileReader(strFile));
+while( (strLine = br.readLine()) != null)                                                 st = new StringTokenizer(strLine, "","");                  while(st.hasMoreTokens()) {System.out.println(st.nextToken(""|""));"
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+,
+TreeMap,"TreeMap treeMap = new TreeMap();
+Collection c = treeMap.values();
+Iterator itr = c.iterator();
+while(itr.hasNext())
+      System.out.println(itr.next());"
+Content Management System,"Publishing, editing and modifying content"
+Application Context,is a BeanFactory + more
+,"ApplicationContext c = new ClassPathXmlApplicationContext(""s.xml""); Triangle triangle = (Triangle) context.getBean(""Triangle"");"
+Spring,Automatic type conversion
+Autowire,"byName, byType (Multiples a problem), byConstructor (same as byType but uses constructor, default is off, hard to debug when using autowire"
+Bean Scopes,"singleton, prototype (new instance every request), web-aware (request, session, global session)"
+Aware interfaces,"ApplicationContextAware, BeanNameAware, Others to get values"
+Beans,"<beans>
+ <bean id=""triangle"" class=""ca.malc.Triangle"">
+  <property name=""pointA"" ref=""pointA""/>
+ </bean>
+ <bean id=""pointA"" class=""ca.malc.Point"">
+  <property name=""x"" value=""0/>
+ </bean>
+</beans>"
+Hibernate Anotations,@Entity
+,@Table
+,@Id
+,@Transient
+,@Column
+,@Column
+,@Lob
+,@GeneratedValue
+ManyToMany,"@ManyToMany(fetch = FetchType.LAZY)
+@JoinTable(name = ""privilege_role"", 
+joinColumns={@JoinColumn(name = ""privilege_id"", nullable = false) }, 
+inverseJoinColumns={@JoinColumn(name=""role_id"",nullable = false)})
+private List<Role> roles = new ArrayList<Role>();"
+OneToMany,"@OneToMany( mappedBy = ""discoveredNetwork"", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<DiscoveredInterface> discoveredInterfaces;"
+ManyToMany,"@ManyToMany(fetch=FetchType.LAZY)
+@JoinTable(name=""user_role"", 
+joinColumns={@JoinColumn(name=""user_id"", nullable=false)}, 
+inverseJoinColumns={@JoinColumn(name=""role_id"", nullable=false)})
+private Set<Role> roles;
+"
+,Common kinds of constraints are:
+,
+,not null - value in a column must not be NULL
+,unique - value(s) in specified column(s) must be unique for each row in a table
+,primary key - value(s) in specified column(s) must be unique for each row in a table and not be NULL; normally each table in a database should have a primary key - it is used to identify individual records
+,foreign key - value(s) in specified column(s) must reference an existing record in another table (via it's primary key or some other unique constraint)
+,"check - an expression is specified, which must evaluate to true for constraint to be satisfied"
