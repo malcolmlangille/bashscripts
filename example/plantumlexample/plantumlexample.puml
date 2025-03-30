@@ -1,0 +1,16 @@
+@startuml
+[*]  --> Repair : missing data
+[*]  --> Created : has data
+
+Repair --> Created : data entered via GUI
+
+Repair --> Deleted : deleted via GUI
+Created --> Authorized : system generated
+Created --> Authorized : user authorizes via GUI
+
+Authorized --> Authorized : business rules fail
+Authorized --> Processed : business rules pass
+
+Deleted --> [*]
+Processed --> [*]
+@enduml
