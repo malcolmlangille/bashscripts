@@ -1,11 +1,12 @@
-package com.example.statemachine;
+package com.example.statetmachine;
 
 /**
  * Defines the possible states a document can be in.
  */
 public enum DocumentState {
-    CREATED,
+    MESSAGE_RECEIVED,
     REPAIR,
+    CREATED,
     AUTHORIZED,
     PROCESSED,
     DELETED

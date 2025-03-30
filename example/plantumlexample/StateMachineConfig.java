@@ -1,7 +1,7 @@
-package com.example.statemachine;
+package com.example.statetmachine;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.statemachine.config.EnableStateMachine;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
@@ -12,54 +12,38 @@ import org.springframework.statemachine.state.State;
 import java.util.EnumSet;
 
 /**
- * Configuration class for the state machine using enums for states and events.
+ * State machine config defining all valid states, transitions, and listener.
  */
 @Configuration
-@EnableStateMachine
+@EnableStateMachineFactory
 public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<DocumentState, DocumentEvent> {
 
-    /**
-     * Defines the possible states and sets the initial and terminal states.
-     */
     @Override
     public void configure(StateMachineStateConfigurer<DocumentState, DocumentEvent> states) throws Exception {
         states
                 .withStates()
-                .initial(DocumentState.REPAIR) // Start here if data is missing
-                .states(EnumSet.allOf(DocumentState.class)) // All defined states
-                .end(DocumentState.PROCESSED) // Final state
-                .end(DocumentState.DELETED);  // Alternative final state
+                .initial(DocumentState.MESSAGE_RECEIVED)
+                .states(EnumSet.allOf(DocumentState.class))
+                .end(DocumentState.PROCESSED)
+                .end(DocumentState.DELETED);
     }
 
-    /**
-     * Defines all the allowed transitions between states based on specific events.
-     */
     @Override
     public void configure(StateMachineTransitionConfigurer<DocumentState, DocumentEvent> transitions) throws Exception {
         transitions
-                .withExternal()
-                .source(DocumentState.REPAIR).target(DocumentState.CREATED).event(DocumentEvent.DATA_ENTERED)
-                // User enters missing data via GUI
-                .and().withExternal()
-                .source(DocumentState.REPAIR).target(DocumentState.DELETED).event(DocumentEvent.DELETED_VIA_GUI)
-                // User deletes document
-                .and().withExternal()
-                .source(DocumentState.CREATED).target(DocumentState.AUTHORIZED).event(DocumentEvent.SYSTEM_GENERATED)
-                // System authorizes automatically
-                .and().withExternal()
-                .source(DocumentState.CREATED).target(DocumentState.AUTHORIZED).event(DocumentEvent.USER_AUTHORIZES)
-                // User authorizes manually
-                .and().withExternal()
-                .source(DocumentState.AUTHORIZED).target(DocumentState.AUTHORIZED).event(DocumentEvent.RULES_FAIL)
-                // Business rules failed, remain in same state
-                .and().withExternal()
-                .source(DocumentState.AUTHORIZED).target(DocumentState.PROCESSED).event(DocumentEvent.RULES_PASS);
-        // Business rules passed, move to processed
+                .withExternal().source(DocumentState.MESSAGE_RECEIVED).target(DocumentState.REPAIR).event(DocumentEvent.MISSING_DATA)
+                .and().withExternal().source(DocumentState.MESSAGE_RECEIVED).target(DocumentState.CREATED).event(DocumentEvent.HAS_DATA)
+
+                .and().withExternal().source(DocumentState.REPAIR).target(DocumentState.CREATED).event(DocumentEvent.DATA_ENTERED)
+                .and().withExternal().source(DocumentState.REPAIR).target(DocumentState.DELETED).event(DocumentEvent.DELETED_VIA_GUI)
+
+                .and().withExternal().source(DocumentState.CREATED).target(DocumentState.AUTHORIZED).event(DocumentEvent.SYSTEM_GENERATED)
+                .and().withExternal().source(DocumentState.CREATED).target(DocumentState.AUTHORIZED).event(DocumentEvent.USER_AUTHORIZES)
+
+                .and().withExternal().source(DocumentState.AUTHORIZED).target(DocumentState.AUTHORIZED).event(DocumentEvent.RULES_FAIL)
+                .and().withExternal().source(DocumentState.AUTHORIZED).target(DocumentState.PROCESSED).event(DocumentEvent.RULES_PASS);
     }
 
-    /**
-     * Adds a listener to log state changes for debugging and illustration.
-     */
     @Override
     public void configure(StateMachineConfigurationConfigurer<DocumentState, DocumentEvent> config) throws Exception {
         config

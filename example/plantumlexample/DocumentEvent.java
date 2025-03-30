@@ -1,4 +1,4 @@
-package com.example.statemachine;
+package com.example.statetmachine;
 
 /**
  * Defines the events that trigger transitions between states.

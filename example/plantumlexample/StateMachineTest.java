@@ -1,4 +1,4 @@
-package com.example.statemachine;
+package com.example.statetmachine;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,98 +7,90 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests for verifying all valid state machine flows and transitions.
+ */
 @SpringBootTest
-class StateMachineTest {
+public class StateMachineTest {
 
     @Autowired
     private StateMachineFactory<DocumentState, DocumentEvent> factory;
 
-    private StateMachine<DocumentState, DocumentEvent> stateMachine;
+    private StateMachine<DocumentState, DocumentEvent> sm;
 
+    /**
+     * Creates and starts a fresh state machine before each test.
+     */
     @BeforeEach
     void setUp() {
-        // Each test will use a fresh machine instance
-        stateMachine = factory.getStateMachine();
+        sm = factory.getStateMachine("test-machine");
+        sm.start();
     }
 
-    /** 
-     * Test user fixing missing data via GUI, authorizing, and business rules passing 
+    /**
+     * Simulates a normal case: data is complete, user authorizes it, and rules pass.
+     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → PROCESSED
      */
     @Test
-    void testScenario1_userFixesDataAndAuthorizes() {
-        stateMachine.start();
-        stateMachine.sendEvent(DocumentEvent.DATA_ENTERED);
-        stateMachine.sendEvent(DocumentEvent.USER_AUTHORIZES);
-        stateMachine.sendEvent(DocumentEvent.RULES_PASS);
+    void testHasDataFlow() {
+        sm.sendEvent(DocumentEvent.HAS_DATA);
+        sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
+        sm.sendEvent(DocumentEvent.RULES_PASS);
 
-        assertEquals(DocumentState.PROCESSED, stateMachine.getState().getId());
+        assertEquals(DocumentState.PROCESSED, sm.getState().getId());
     }
 
-    /** 
-     * Test starting from CREATED and manually authorizing 
+    /**
+     * Simulates missing data that is repaired by user before authorization.
+     * Expected path: MESSAGE_RECEIVED → REPAIR → CREATED → AUTHORIZED → PROCESSED
      */
     @Test
-    void testScenario2_alreadyHasData() {
-        stateMachine.start();
-        stateMachine.getStateMachineAccessor().doWithAllRegions(access -> access.resetStateMachine(
-                org.springframework.statemachine.support.DefaultStateMachineContext.of(DocumentState.CREATED, null, null, null)
-        ));
+    void testMissingDataFlow() {
+        sm.sendEvent(DocumentEvent.MISSING_DATA);
+        sm.sendEvent(DocumentEvent.DATA_ENTERED);
+        sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
+        sm.sendEvent(DocumentEvent.RULES_PASS);
 
-        stateMachine.sendEvent(DocumentEvent.USER_AUTHORIZES);
-        stateMachine.sendEvent(DocumentEvent.RULES_PASS);
-
-        assertEquals(DocumentState.PROCESSED, stateMachine.getState().getId());
+        assertEquals(DocumentState.PROCESSED, sm.getState().getId());
     }
 
-    /** 
-     * Test system auto-authorizing after data is entered 
+    /**
+     * Simulates auto-authorization by system without user input.
+     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → PROCESSED
      */
     @Test
-    void testScenario3_systemAutoAuthorizes() {
-        stateMachine.start();
-        stateMachine.sendEvent(DocumentEvent.DATA_ENTERED);
-        stateMachine.sendEvent(DocumentEvent.SYSTEM_GENERATED);
-        stateMachine.sendEvent(DocumentEvent.RULES_PASS);
+    void testSystemGeneratedFlow() {
+        sm.sendEvent(DocumentEvent.HAS_DATA);
+        sm.sendEvent(DocumentEvent.SYSTEM_GENERATED);
+        sm.sendEvent(DocumentEvent.RULES_PASS);
 
-        assertEquals(DocumentState.PROCESSED, stateMachine.getState().getId());
+        assertEquals(DocumentState.PROCESSED, sm.getState().getId());
     }
 
-    /** 
-     * Test user manually authorizes after entering data 
+    /**
+     * Simulates early deletion by user before data is repaired.
+     * Expected path: MESSAGE_RECEIVED → REPAIR → DELETED
      */
     @Test
-    void testScenario4_userAuthorizesViaGUI() {
-        stateMachine.start();
-        stateMachine.sendEvent(DocumentEvent.DATA_ENTERED);
-        stateMachine.sendEvent(DocumentEvent.USER_AUTHORIZES);
-        stateMachine.sendEvent(DocumentEvent.RULES_PASS);
+    void testDeleteFlow() {
+        sm.sendEvent(DocumentEvent.MISSING_DATA);
+        sm.sendEvent(DocumentEvent.DELETED_VIA_GUI);
 
-        assertEquals(DocumentState.PROCESSED, stateMachine.getState().getId());
+        assertEquals(DocumentState.DELETED, sm.getState().getId());
     }
 
-    /** 
-     * Optional test: Deleting during repair should end in DELETED 
+    /**
+     * Simulates a case where business rules fail after authorization.
+     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → AUTHORIZED
      */
     @Test
-    void testDeleteFromRepair() {
-        stateMachine.start();
-        stateMachine.sendEvent(DocumentEvent.DELETED_VIA_GUI);
+    void testRulesFailLoop() {
+        sm.sendEvent(DocumentEvent.HAS_DATA);
+        sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
+        sm.sendEvent(DocumentEvent.RULES_FAIL);
 
-        assertEquals(DocumentState.DELETED, stateMachine.getState().getId());
-    }
-
-    /** 
-     * Optional test: Business rules failing stays in AUTHORIZED 
-     */
-    @Test
-    void testRulesFailStaysInAuthorized() {
-        stateMachine.start();
-        stateMachine.sendEvent(DocumentEvent.DATA_ENTERED);
-        stateMachine.sendEvent(DocumentEvent.USER_AUTHORIZES);
-        stateMachine.sendEvent(DocumentEvent.RULES_FAIL);
-
-        assertEquals(DocumentState.AUTHORIZED, stateMachine.getState().getId());
+        assertEquals(DocumentState.AUTHORIZED, sm.getState().getId());
     }
 }
