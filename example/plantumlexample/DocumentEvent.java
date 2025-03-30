@@ -1,5 +1,8 @@
 package com.example.statemachine;
 
+/**
+ * Defines the events that trigger transitions between states.
+ */
 public enum DocumentEvent {
     HAS_DATA,
     MISSING_DATA,
