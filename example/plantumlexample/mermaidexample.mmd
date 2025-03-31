@@ -1,0 +1,19 @@
+stateDiagram-v2
+    [*] --> MESSAGE_RECEIVED : message received
+    MESSAGE_RECEIVED --> check_data
+
+    state check_data <<choice>>
+    check_data --> Repair : data is missing
+    check_data --> Created : data is valid
+
+    Repair --> Created : data entered via GUI
+    Repair --> Deleted : deleted via GUI
+
+    Created --> Authorized : system generated
+    Created --> Authorized : user authorizes via GUI
+
+    Authorized --> Authorized : rules fail
+    Authorized --> Processed : rules pass
+
+    Deleted --> [*]
+    Processed --> [*]
