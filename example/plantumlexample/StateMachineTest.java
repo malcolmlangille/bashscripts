@@ -2,6 +2,8 @@ package com.example.statetmachine;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.statemachine.StateMachine;
@@ -10,7 +12,7 @@ import org.springframework.statemachine.config.StateMachineFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for verifying all valid state machine flows and transitions.
+ * Tests for verifying state machine flows and input-based branching using MessageText.
  */
 @SpringBootTest
 public class StateMachineTest {
@@ -20,35 +22,37 @@ public class StateMachineTest {
 
     private StateMachine<DocumentState, DocumentEvent> sm;
 
-    /**
-     * Creates and starts a fresh state machine before each test.
-     */
     @BeforeEach
     void setUp() {
-        sm = factory.getStateMachine("test-machine");
+        sm = factory.getStateMachine("param-test-machine");
         sm.start();
     }
 
     /**
-     * Simulates a normal case: data is complete, user authorizes it, and rules pass.
-     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → PROCESSED
+     * Parameterized test to verify whether MessageText routes to CREATED or REPAIR.
      */
-    @Test
-    void testHasDataFlow() {
-        sm.sendEvent(DocumentEvent.HAS_DATA);
-        sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
-        sm.sendEvent(DocumentEvent.RULES_PASS);
+    @ParameterizedTest
+    @CsvSource({
+            "a,b,c,CREATED",      // all fields present
+            "a,,c,REPAIR",        // missing field b
+            "'','','',REPAIR",    // all missing
+            "foo,bar,baz,CREATED" // valid values
+    })
+    void testCheckDataRouting(String a, String b, String c, DocumentState expectedState) {
+        MessageText msg = new MessageText(a, b, c);
+        sm.getExtendedState().getVariables().put("message", msg);
+        sm.sendEvent(DocumentEvent.DATA_ENTERED);
 
-        assertEquals(DocumentState.PROCESSED, sm.getState().getId());
+        assertEquals(expectedState, sm.getState().getId());
     }
 
     /**
-     * Simulates missing data that is repaired by user before authorization.
-     * Expected path: MESSAGE_RECEIVED → REPAIR → CREATED → AUTHORIZED → PROCESSED
+     * Valid input flow: CREATED → AUTHORIZED → PROCESSED
      */
     @Test
-    void testMissingDataFlow() {
-        sm.sendEvent(DocumentEvent.MISSING_DATA);
+    void testValidFlowToProcessed() {
+        MessageText msg = new MessageText("a", "b", "c");
+        sm.getExtendedState().getVariables().put("message", msg);
         sm.sendEvent(DocumentEvent.DATA_ENTERED);
         sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
         sm.sendEvent(DocumentEvent.RULES_PASS);
@@ -57,12 +61,17 @@ public class StateMachineTest {
     }
 
     /**
-     * Simulates auto-authorization by system without user input.
-     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → PROCESSED
+     * Repair path followed by fix and completion.
      */
     @Test
-    void testSystemGeneratedFlow() {
-        sm.sendEvent(DocumentEvent.HAS_DATA);
+    void testRepairThenFixThenProcess() {
+        MessageText msg = new MessageText("x", "", "z");
+        sm.getExtendedState().getVariables().put("message", msg);
+        sm.sendEvent(DocumentEvent.DATA_ENTERED); // goes to REPAIR
+        assertEquals(DocumentState.REPAIR, sm.getState().getId());
+
+        // Simulate user entering missing data and system auto-authorizes
+        sm.sendEvent(DocumentEvent.DATA_ENTERED);
         sm.sendEvent(DocumentEvent.SYSTEM_GENERATED);
         sm.sendEvent(DocumentEvent.RULES_PASS);
 
@@ -70,24 +79,26 @@ public class StateMachineTest {
     }
 
     /**
-     * Simulates early deletion by user before data is repaired.
-     * Expected path: MESSAGE_RECEIVED → REPAIR → DELETED
+     * Test deletion during repair.
      */
     @Test
-    void testDeleteFlow() {
-        sm.sendEvent(DocumentEvent.MISSING_DATA);
-        sm.sendEvent(DocumentEvent.DELETED_VIA_GUI);
+    void testRepairThenDelete() {
+        MessageText msg = new MessageText("", "", "");
+        sm.getExtendedState().getVariables().put("message", msg);
+        sm.sendEvent(DocumentEvent.DATA_ENTERED); // goes to REPAIR
+        sm.sendEvent(DocumentEvent.DELETED_VIA_GUI); // deleted
 
         assertEquals(DocumentState.DELETED, sm.getState().getId());
     }
 
     /**
-     * Simulates a case where business rules fail after authorization.
-     * Expected path: MESSAGE_RECEIVED → CREATED → AUTHORIZED → AUTHORIZED
+     * Rules fail after authorization: should remain in AUTHORIZED.
      */
     @Test
-    void testRulesFailLoop() {
-        sm.sendEvent(DocumentEvent.HAS_DATA);
+    void testRulesFail() {
+        MessageText msg = new MessageText("1", "2", "3");
+        sm.getExtendedState().getVariables().put("message", msg);
+        sm.sendEvent(DocumentEvent.DATA_ENTERED);
         sm.sendEvent(DocumentEvent.USER_AUTHORIZES);
         sm.sendEvent(DocumentEvent.RULES_FAIL);
 

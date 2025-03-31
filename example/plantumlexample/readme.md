@@ -66,3 +66,10 @@ stateMachine.getStateMachineAccessor()
 
 🗂 10. StateMachineInterceptor
 Hooks into pre/post transitions for logging, auditing, or even blocking transitions.
+
+Test Coverage Summary
+testValidFlowToProcessed	Valid data → CREATED → AUTHORIZED → PROCESSED
+testRepairThenValidFlow	Missing field → REPAIR → user fixes → CREATED → AUTHORIZED → PROCESSED
+testRepairThenDeleted	All fields missing → REPAIR → user deletes → DELETED
+testRulesFail	Valid data → CREATED → AUTHORIZED → rules fail → stays in AUTHORIZED
+
