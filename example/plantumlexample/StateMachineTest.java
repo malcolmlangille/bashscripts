@@ -9,12 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
+import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Tests for verifying state machine flows and input-based branching using MessageText.
- */
 @SpringBootTest
 public class StateMachineTest {
 
@@ -29,79 +27,63 @@ public class StateMachineTest {
         sm.start();
     }
 
-    /**
-     * Parameterized test to verify whether MessageText routes to CREATED or REPAIR.
-     */
+    private void send(DocumentEvent event) {
+        sm.sendEvent(Mono.just(MessageBuilder.withPayload(event).build())).block();
+    }
+
     @ParameterizedTest
     @CsvSource({
-            "a,b,c,CREATED",      // all fields present
-            "a,,c,REPAIR",        // missing field b
-            "'','','',REPAIR",    // all missing
-            "foo,bar,baz,CREATED" // valid values
+            "a,b,c,CREATED",
+            "a,,c,REPAIR",
+            "'','','',REPAIR",
+            "foo,bar,baz,CREATED"
     })
     void testCheckDataRouting(String a, String b, String c, DocumentState expectedState) {
         MessageText msg = new MessageText(a, b, c);
         sm.getExtendedState().getVariables().put("message", msg);
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
-
+        send(DocumentEvent.DATA_ENTERED);
         assertEquals(expectedState, sm.getState().getId());
     }
 
-    /**
-     * Valid input flow: CREATED → AUTHORIZED → PROCESSED
-     */
     @Test
     void testValidFlowToProcessed() {
         MessageText msg = new MessageText("a", "b", "c");
         sm.getExtendedState().getVariables().put("message", msg);
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.USER_AUTHORIZES).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.RULES_PASS).build());
-
+        send(DocumentEvent.DATA_ENTERED);
+        send(DocumentEvent.USER_AUTHORIZES);
+        send(DocumentEvent.RULES_PASS);
         assertEquals(DocumentState.PROCESSED, sm.getState().getId());
     }
 
-    /**
-     * Repair path followed by fix and completion.
-     */
     @Test
     void testRepairThenFixThenProcess() {
         MessageText msg = new MessageText("x", "", "z");
         sm.getExtendedState().getVariables().put("message", msg);
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
+        send(DocumentEvent.DATA_ENTERED);
         assertEquals(DocumentState.REPAIR, sm.getState().getId());
 
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.SYSTEM_GENERATED).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.RULES_PASS).build());
-
+        send(DocumentEvent.DATA_ENTERED);
+        send(DocumentEvent.SYSTEM_GENERATED);
+        send(DocumentEvent.RULES_PASS);
         assertEquals(DocumentState.PROCESSED, sm.getState().getId());
     }
 
-    /**
-     * Test deletion during repair.
-     */
     @Test
     void testRepairThenDelete() {
         MessageText msg = new MessageText("", "", "");
         sm.getExtendedState().getVariables().put("message", msg);
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DELETED_VIA_GUI).build());
-
+        send(DocumentEvent.DATA_ENTERED);
+        send(DocumentEvent.DELETED_VIA_GUI);
         assertEquals(DocumentState.DELETED, sm.getState().getId());
     }
 
-    /**
-     * Rules fail after authorization: should remain in AUTHORIZED.
-     */
     @Test
     void testRulesFail() {
         MessageText msg = new MessageText("1", "2", "3");
         sm.getExtendedState().getVariables().put("message", msg);
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.DATA_ENTERED).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.USER_AUTHORIZES).build());
-        sm.sendEvent(MessageBuilder.withPayload(DocumentEvent.RULES_FAIL).build());
-
+        send(DocumentEvent.DATA_ENTERED);
+        send(DocumentEvent.USER_AUTHORIZES);
+        send(DocumentEvent.RULES_FAIL);
         assertEquals(DocumentState.AUTHORIZED, sm.getState().getId());
     }
 }
