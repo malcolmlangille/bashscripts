@@ -2,7 +2,7 @@ package com.example.statetmachine;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
-import org.springframework.statemachine.config.StateMachineConfigurer;
+import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 @Configuration
 @EnableStateMachineFactory
-public class StateMachineConfig implements StateMachineConfigurer<DocumentState, DocumentEvent> {
+public class StateMachineConfig extends StateMachineConfigurerAdapter<DocumentState, DocumentEvent> {
 
     @Override
     public void configure(StateMachineStateConfigurer<DocumentState, DocumentEvent> states) throws Exception {
