@@ -3,17 +3,47 @@ stateDiagram-v2
     MESSAGE_RECEIVED --> check_data
 
     state check_data <<choice>>
-    check_data --> Repair : data is missing
-    check_data --> Created : data is valid
+    check_data --> REPAIR : data is missing
+    check_data --> CREATED : data is valid
 
-    Repair --> Created : data entered via GUI
-    Repair --> Deleted : deleted via GUI
+    REPAIR --> input_data : data entered via GUI
+    
+    state input_data <<choice>>
+    input_data --> REPAIR : data is missing
+    input_data --> CREATED : data is valid
+    
+    REPAIR --> DELETED : deleted via GUI
 
-    Created --> Authorized : system generated
-    Created --> Authorized : user authorizes via GUI
+    CREATED --> system_check : system generated
+    CREATED --> user_check : user authorizes via GUI
 
-    Authorized --> Authorized : rules fail
-    Authorized --> Processed : rules pass
+    CREATED --> DELETED : deleted via GUI
 
-    Deleted --> [*]
-    Processed --> [*]
+    state system_check <<choice>>
+    system_check --> CREATED : data is missing
+    system_check --> AUTHORIZED : data is valid
+
+    state user_check <<choice>>
+    user_check --> CREATED : data is missing
+    user_check --> AUTHORIZED : data is valid
+
+    AUTHORIZED --> process : authorized
+
+    state process <<choice>>
+    process --> have : no processing
+    process --> override : processing
+
+    state override <<choice>>
+    override --> have : pass rules
+    override --> AUTHORIZED : not allowed
+
+    state have <<choice>>
+    have --> PROCESSED : has
+    have --> allow : does not have
+
+    state allow <<choice>>
+    allow --> PROCESSED : allow
+    allow --> AUTHORIZED : not allowed
+
+    DELETED --> [*] : complete
+    PROCESSED --> [*] : complete
