@@ -1,0 +1,22 @@
+= "[" &
+  TEXTJOIN( ","
+          , TRUE
+          , IF(
+              A$1:D$1 <> ""
+            , "{\"name\":\"" & A$1:D$1 & "\",\"value\":\"" & A$2:D$2 & "\"}"
+            , ""
+            )
+          )
+  & "]"
+
+=LET(
+  hdr, A1:D1,
+  val, A2:D2,
+  items, IF(hdr<>"",
+            "{\"name\":\""&hdr&"\",\"value\":\""&val&"\"}",
+            ""
+          ),
+  "[" & TEXTJOIN(",", TRUE, items) & "]"
+)
+
+
