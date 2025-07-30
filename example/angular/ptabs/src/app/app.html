@@ -69,77 +69,71 @@
       <h2 class="text-3xl font-semibold text-center mb-8 text-gray-800">{{ title() }}</h2>
 
       <!-- PrimeNG Tabs Implementation -->
-      <p-tabs [(value)]="activeTabIndex" [lazy]="false">
-        <p-tablist>
-          <p-tab [value]="0">{{ getDetailsTabLabel() }}</p-tab>
-          <p-tab [value]="1">{{ getHistoryTabLabel() }}</p-tab>
-        </p-tablist>
-        <p-tabpanels>
-          <p-tabpanel [value]="0">
-            <app-details></app-details>
-          </p-tabpanel>
-          <p-tabpanel [value]="1">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">History Tab</h3>
-            <p class="text-gray-600 leading-relaxed mb-5">This is the history tab content. You can display historical data here.</p>
+      <p-tabView [(activeIndex)]="activeTabIndex">
+        <p-tabPanel [header]="getDetailsTabLabel()">
+          <app-details></app-details>
+        </p-tabPanel>
+        <p-tabPanel [header]="getHistoryTabLabel()">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">History Tab</h3>
+          <p class="text-gray-600 leading-relaxed mb-5">This is the history tab content. You can display historical data here.</p>
 
-            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="recent-activity">
-              <h4 class="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h4>
-              <p class="text-gray-600 leading-relaxed mb-4">
-                The application has been actively developed with regular updates and improvements.
-                Recent changes include the integration of PrimeNG components, implementation of responsive
-                design patterns, and enhancement of user interface elements. Each update focuses on
-                improving user experience while maintaining code quality and performance standards.
-              </p>
-              <div class="flex justify-between py-2 border-b border-gray-200">
-                <span class="font-semibold text-gray-700">2024-01-15</span>
-                <span class="text-gray-600">Action performed</span>
-              </div>
-              <div class="flex justify-between py-2 border-b border-gray-200">
-                <span class="font-semibold text-gray-700">2024-01-14</span>
-                <span class="text-gray-600">Another action</span>
-              </div>
-              <div class="flex justify-between py-2">
-                <span class="font-semibold text-gray-700">2024-01-13</span>
-                <span class="text-gray-600">Previous activity</span>
-              </div>
+          <div class="bg-gray-50 p-5 rounded-lg mt-5" id="recent-activity">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h4>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              The application has been actively developed with regular updates and improvements.
+              Recent changes include the integration of PrimeNG components, implementation of responsive
+              design patterns, and enhancement of user interface elements. Each update focuses on
+              improving user experience while maintaining code quality and performance standards.
+            </p>
+            <div class="flex justify-between py-2 border-b border-gray-200">
+              <span class="font-semibold text-gray-700">2024-01-15</span>
+              <span class="text-gray-600">Action performed</span>
             </div>
+            <div class="flex justify-between py-2 border-b border-gray-200">
+              <span class="font-semibold text-gray-700">2024-01-14</span>
+              <span class="text-gray-600">Another action</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="font-semibold text-gray-700">2024-01-13</span>
+              <span class="text-gray-600">Previous activity</span>
+            </div>
+          </div>
 
-            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="development-timeline">
-              <h4 class="text-lg font-semibold text-gray-700 mb-4">Development Timeline</h4>
-              <p class="text-gray-600 leading-relaxed">
-                The project began as a simple Angular application and has evolved into a comprehensive
-                demonstration of modern web development practices. The development timeline shows a clear
-                progression from basic functionality to advanced features, including the integration of
-                third-party libraries, implementation of complex UI components, and adoption of best
-                practices for maintainable code architecture.
-              </p>
-            </div>
+          <div class="bg-gray-50 p-5 rounded-lg mt-5" id="development-timeline">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4">Development Timeline</h4>
+            <p class="text-gray-600 leading-relaxed">
+              The project began as a simple Angular application and has evolved into a comprehensive
+              demonstration of modern web development practices. The development timeline shows a clear
+              progression from basic functionality to advanced features, including the integration of
+              third-party libraries, implementation of complex UI components, and adoption of best
+              practices for maintainable code architecture.
+            </p>
+          </div>
 
-            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="version-history">
-              <h4 class="text-lg font-semibold text-gray-700 mb-4">Version History</h4>
-              <p class="text-gray-600 leading-relaxed">
-                Multiple versions have been released throughout the development process, each bringing
-                new features and improvements. The version history reflects the iterative approach to
-                development, with each release building upon previous work while addressing user feedback
-                and technical requirements. This approach ensures continuous improvement and adaptation
-                to changing needs and technologies.
-              </p>
-            </div>
+          <div class="bg-gray-50 p-5 rounded-lg mt-5" id="version-history">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4">Version History</h4>
+            <p class="text-gray-600 leading-relaxed">
+              Multiple versions have been released throughout the development process, each bringing
+              new features and improvements. The version history reflects the iterative approach to
+              development, with each release building upon previous work while addressing user feedback
+              and technical requirements. This approach ensures continuous improvement and adaptation
+              to changing needs and technologies.
+            </p>
+          </div>
 
-            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="user-feedback-integration">
-              <h4 class="text-lg font-semibold text-gray-700 mb-4">User Feedback Integration</h4>
-              <p class="text-gray-600 leading-relaxed">
-                User feedback has played a crucial role in shaping the application's development.
-                Regular reviews and testing sessions have provided valuable insights into user needs
-                and preferences. This feedback has been systematically integrated into the development
-                process, resulting in improvements to usability, accessibility, and overall user
-                experience. The iterative feedback loop ensures the application remains relevant and
-                user-friendly.
-              </p>
-            </div>
-          </p-tabpanel>
-        </p-tabpanels>
-      </p-tabs>
+          <div class="bg-gray-50 p-5 rounded-lg mt-5" id="user-feedback-integration">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4">User Feedback Integration</h4>
+            <p class="text-gray-600 leading-relaxed">
+              User feedback has played a crucial role in shaping the application's development.
+              Regular reviews and testing sessions have provided valuable insights into user needs
+              and preferences. This feedback has been systematically integrated into the development
+              process, resulting in improvements to usability, accessibility, and overall user
+              experience. The iterative feedback loop ensures the application remains relevant and
+              user-friendly.
+            </p>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
     </div>
   </div>
 

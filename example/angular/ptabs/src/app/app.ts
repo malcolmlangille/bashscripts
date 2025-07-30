@@ -3,13 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { NavigationComponent, NavigationItem } from './navigation/navigation.component';
 import { SectionService } from './services/section.service';
 import { DetailsComponent } from './details/details.component';
-import { TabsModule } from 'primeng/tabs';
+import { TabViewModule } from 'primeng/tabview';
 import { TranslationService } from './services/translation.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent, DetailsComponent, TabsModule],
+  imports: [RouterOutlet, NavigationComponent, DetailsComponent, TabViewModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -209,8 +209,8 @@ export class App implements AfterViewInit, OnInit, OnDestroy {
     if (!element) {
       console.log('Element not found globally, checking tab panels...');
       // If not found, try to find it within any tab panel
-      // Try multiple possible PrimeNG v20 selectors
-      const tabPanels = document.querySelectorAll('.p-tabpanel, .p-tabs-panel, [data-pc-name="tabpanel"]');
+      // Try multiple possible PrimeNG 19 selectors
+      const tabPanels = document.querySelectorAll('.p-tabview-panel, .p-tabview-panels .p-tabview-panel, [data-pc-name="tabviewpanel"]');
       console.log('Found tab panels:', tabPanels.length);
 
       for (const panel of tabPanels) {
@@ -238,7 +238,7 @@ export class App implements AfterViewInit, OnInit, OnDestroy {
       console.log('Available elements with IDs:', Array.from(allElements).map(el => el.id));
 
       // Also log the active tab panel content - try multiple selectors
-      const activeTabPanel = document.querySelector('.p-tabpanel-active, .p-tabs-panel-active, [data-pc-name="tabpanel"][aria-hidden="false"]');
+      const activeTabPanel = document.querySelector('.p-tabview-panel-active, .p-tabview-panels .p-tabview-panel-active, [data-pc-name="tabviewpanel"][aria-hidden="false"]');
       if (activeTabPanel) {
         console.log('Active tab panel content:', activeTabPanel.innerHTML);
       }
