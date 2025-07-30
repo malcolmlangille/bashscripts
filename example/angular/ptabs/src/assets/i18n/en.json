@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "title": "Navigation",
+    "keyFeatures": "Key Features",
+    "technicalImplementation": "Technical Implementation",
+    "notes": "Notes",
+    "projectOverview": "Project Overview",
+    "technicalArchitecture": "Technical Architecture",
+    "userInterfaceDesign": "User Interface Design",
+    "componentIntegration": "Component Integration",
+    "futureEnhancements": "Future Enhancements"
+  },
+  "tabs": {
+    "details": "Details",
+    "history": "History"
+  },
+  "common": {
+    "languageToggle": "EN"
+  }
+} 

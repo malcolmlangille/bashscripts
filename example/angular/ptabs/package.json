@@ -25,6 +25,7 @@
     "@angular/compiler": "^20.2.0-next.0",
     "@angular/core": "^20.2.0-next.0",
     "@angular/forms": "^20.2.0-next.0",
+    "@angular/localize": "^20.1.3",
     "@angular/platform-browser": "^20.2.0-next.0",
     "@angular/router": "^20.2.0-next.0",
     "primeicons": "^7.0.0",

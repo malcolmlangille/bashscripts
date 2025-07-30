@@ -1,9 +1,11 @@
-import { Component, signal, ViewChild, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, signal, ViewChild, AfterViewInit, ChangeDetectorRef, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationComponent, NavigationItem } from './navigation/navigation.component';
 import { SectionService } from './services/section.service';
 import { DetailsComponent } from './details/details.component';
 import { TabsModule } from 'primeng/tabs';
+import { TranslationService } from './services/translation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,7 @@ import { TabsModule } from 'primeng/tabs';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements AfterViewInit {
+export class App implements AfterViewInit, OnInit, OnDestroy {
   protected readonly title = signal('ptabs');
   protected readonly activeTabIndex = signal(0);
   protected readonly activeSection = signal('');
@@ -22,13 +24,35 @@ export class App implements AfterViewInit {
 
   // Navigation items - will be populated dynamically
   protected navigationItems: NavigationItem[] = [];
+  private languageSubscription?: Subscription;
 
   @ViewChild('tabs') tabs: any;
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private sectionService: SectionService
+    private sectionService: SectionService,
+    private translationService: TranslationService
   ) {}
+
+  ngOnInit(): void {
+    // Load initial translations
+    this.translationService.loadTranslations('en').subscribe();
+    this.translationService.loadTranslations('fr').subscribe(() => {
+      // After translations are loaded, set default language
+      this.translationService.setLanguage('en');
+    });
+
+    // Subscribe to language changes to trigger change detection
+    this.languageSubscription = this.translationService.getLanguageChangeObservable().subscribe(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
 
   ngAfterViewInit() {
     // Initialize navigation items after view is ready
@@ -224,5 +248,14 @@ export class App implements AfterViewInit {
   // Handle navigation component events
   onNavigationClick(event: {sectionId: string, tabIndex?: number}): void {
     this.scrollToSection(event.sectionId, event.tabIndex);
+  }
+
+  // Translation methods for tab labels
+  getDetailsTabLabel(): string {
+    return this.translationService.getTranslation('tabs.details');
+  }
+
+  getHistoryTabLabel(): string {
+    return this.translationService.getTranslation('tabs.history');
   }
 }

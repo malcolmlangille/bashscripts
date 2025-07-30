@@ -71,8 +71,8 @@
       <!-- PrimeNG Tabs Implementation -->
       <p-tabs [(value)]="activeTabIndex" [lazy]="false">
         <p-tablist>
-          <p-tab [value]="0">Details</p-tab>
-          <p-tab [value]="1">History</p-tab>
+          <p-tab [value]="0">{{ getDetailsTabLabel() }}</p-tab>
+          <p-tab [value]="1">{{ getHistoryTabLabel() }}</p-tab>
         </p-tablist>
         <p-tabpanels>
           <p-tabpanel [value]="0">
