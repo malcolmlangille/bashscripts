@@ -2,10 +2,11 @@ import { Component, signal, ViewChild, AfterViewInit, ChangeDetectorRef, HostLis
 import { RouterOutlet } from '@angular/router';
 import { NavigationComponent, NavigationItem } from './navigation/navigation.component';
 import { SectionService } from './services/section.service';
+import { DetailsComponent } from './details/details.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent],
+  imports: [RouterOutlet, NavigationComponent, DetailsComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
