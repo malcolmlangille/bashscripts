@@ -1,0 +1,20 @@
+<div class="w-72 p-5 bg-gray-50 border-l border-gray-200 sticky top-0 h-screen overflow-y-auto">
+  <div class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+    <div class="bg-gray-50 px-5 py-4 border-b border-gray-200 font-semibold text-gray-700">
+      <h3 class="text-base font-semibold m-0">Navigation</h3>
+    </div>
+    <div class="flex flex-col relative">
+      <div *ngFor="let item of items" 
+           class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+           [class.bg-gray-50]="activeSection === item.id"
+           [class.text-blue-600]="activeSection === item.id"
+           [class.font-semibold]="activeSection === item.id"
+           [class.border-l-4]="activeSection === item.id"
+           [class.border-blue-600]="activeSection === item.id"
+           [class.pl-4]="activeSection === item.id"
+           (click)="onSectionClick(item.id, item.tabIndex)">
+        {{ item.label }}
+      </div>
+    </div>
+  </div>
+</div> 

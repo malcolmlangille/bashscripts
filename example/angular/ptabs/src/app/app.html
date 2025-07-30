@@ -210,79 +210,12 @@
     </div>
   </div>
 
-  <div class="w-72 p-5 bg-gray-50 border-l border-gray-200 sticky top-0 h-screen overflow-y-auto">
-    <div class="border border-gray-200 rounded-lg bg-white overflow-hidden">
-      <div class="bg-gray-50 px-5 py-4 border-b border-gray-200 font-semibold text-gray-700">
-        <h3 class="text-base font-semibold m-0">Navigation</h3>
-      </div>
-      <div class="flex flex-col relative">
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'key-features'"
-             [class.text-blue-600]="activeSection() === 'key-features'"
-             [class.font-semibold]="activeSection() === 'key-features'"
-             [class.border-l-4]="activeSection() === 'key-features'"
-             [class.border-blue-600]="activeSection() === 'key-features'"
-             [class.pl-4]="activeSection() === 'key-features'"
-             (click)="scrollToSection('key-features')">Key Features</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'technical-implementation'"
-             [class.text-blue-600]="activeSection() === 'technical-implementation'"
-             [class.font-semibold]="activeSection() === 'technical-implementation'"
-             [class.border-l-4]="activeSection() === 'technical-implementation'"
-             [class.border-blue-600]="activeSection() === 'technical-implementation'"
-             [class.pl-4]="activeSection() === 'technical-implementation'"
-             (click)="scrollToSection('technical-implementation')">Technical Implementation</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'notes'"
-             [class.text-blue-600]="activeSection() === 'notes'"
-             [class.font-semibold]="activeSection() === 'notes'"
-             [class.border-l-4]="activeSection() === 'notes'"
-             [class.border-blue-600]="activeSection() === 'notes'"
-             [class.pl-4]="activeSection() === 'notes'"
-             (click)="scrollToSection('notes')">Notes</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'project-overview'"
-             [class.text-blue-600]="activeSection() === 'project-overview'"
-             [class.font-semibold]="activeSection() === 'project-overview'"
-             [class.border-l-4]="activeSection() === 'project-overview'"
-             [class.border-blue-600]="activeSection() === 'project-overview'"
-             [class.pl-4]="activeSection() === 'project-overview'"
-             (click)="scrollToSection('project-overview', 0)">Project Overview</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'technical-architecture'"
-             [class.text-blue-600]="activeSection() === 'technical-architecture'"
-             [class.font-semibold]="activeSection() === 'technical-architecture'"
-             [class.border-l-4]="activeSection() === 'technical-architecture'"
-             [class.border-blue-600]="activeSection() === 'technical-architecture'"
-             [class.pl-4]="activeSection() === 'technical-architecture'"
-             (click)="scrollToSection('technical-architecture', 0)">Technical Architecture</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'user-interface-design'"
-             [class.text-blue-600]="activeSection() === 'user-interface-design'"
-             [class.font-semibold]="activeSection() === 'user-interface-design'"
-             [class.border-l-4]="activeSection() === 'user-interface-design'"
-             [class.border-blue-600]="activeSection() === 'user-interface-design'"
-             [class.pl-4]="activeSection() === 'user-interface-design'"
-             (click)="scrollToSection('user-interface-design', 0)">User Interface Design</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'component-integration'"
-             [class.text-blue-600]="activeSection() === 'component-integration'"
-             [class.font-semibold]="activeSection() === 'component-integration'"
-             [class.border-l-4]="activeSection() === 'component-integration'"
-             [class.border-blue-600]="activeSection() === 'component-integration'"
-             [class.pl-4]="activeSection() === 'component-integration'"
-             (click)="scrollToSection('component-integration', 0)">Component Integration</div>
-        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
-             [class.bg-gray-50]="activeSection() === 'future-enhancements'"
-             [class.text-blue-600]="activeSection() === 'future-enhancements'"
-             [class.font-semibold]="activeSection() === 'future-enhancements'"
-             [class.border-l-4]="activeSection() === 'future-enhancements'"
-             [class.border-blue-600]="activeSection() === 'future-enhancements'"
-             [class.pl-4]="activeSection() === 'future-enhancements'"
-             (click)="scrollToSection('future-enhancements', 0)">Future Enhancements</div>
-      </div>
-    </div>
-  </div>
+  <!-- Reusable Navigation Component -->
+  <app-navigation 
+    [items]="navigationItems"
+    [activeSection]="activeSection()"
+    (sectionClick)="onNavigationClick($event)">
+  </app-navigation>
 </div>
 
 <router-outlet />

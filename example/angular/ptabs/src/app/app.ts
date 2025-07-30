@@ -1,9 +1,11 @@
 import { Component, signal, ViewChild, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavigationComponent, NavigationItem } from './navigation/navigation.component';
+import { SectionService } from './services/section.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavigationComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -15,14 +17,27 @@ export class App implements AfterViewInit {
   private isProgrammaticScroll = false;
   private manualNavigationTimeout: any = null;
   private lastManualNavigationTime: number | null = null;
-  
+
+  // Navigation items - will be populated dynamically
+  protected navigationItems: NavigationItem[] = [];
+
   @ViewChild('tabs') tabs: any;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private sectionService: SectionService
+  ) {}
 
   ngAfterViewInit() {
-    // Component is ready
+    // Initialize navigation items after view is ready
+    this.initializeNavigationItems();
     this.updateActiveSection();
+  }
+
+  private initializeNavigationItems(): void {
+    // Get navigation items from the service
+    this.navigationItems = this.sectionService.extractNavigationItems();
+    console.log('Navigation items initialized:', this.navigationItems);
   }
 
   @HostListener('window:scroll')
@@ -31,20 +46,8 @@ export class App implements AfterViewInit {
   }
 
   private updateActiveSection(): void {
-    // Don't update if we're in the middle of manual navigation or programmatic scrolling
     if (this.isManualNavigation || this.isProgrammaticScroll) {
       console.log('Skipping scroll tracking - manual navigation or programmatic scroll in progress');
-      return;
-    }
-
-    // Additional check: if we have a manual navigation timeout active, skip
-    if (this.manualNavigationTimeout) {
-      console.log('Skipping scroll tracking - manual navigation timeout active');
-      return;
-    }
-
-    // Safety check: if flags have been set for too long, clear them
-    if (this.isManualNavigation || this.isProgrammaticScroll) {
       const now = Date.now();
       if (this.lastManualNavigationTime && (now - this.lastManualNavigationTime) > 2000) {
         console.log('Safety clearing flags - they have been set for too long');
@@ -52,19 +55,10 @@ export class App implements AfterViewInit {
         this.isProgrammaticScroll = false;
         this.manualNavigationTimeout = null;
       }
+      return;
     }
 
-    const sections = [
-      'key-features',
-      'technical-implementation', 
-      'notes',
-      'project-overview',
-      'technical-architecture',
-      'user-interface-design',
-      'component-integration',
-      'future-enhancements'
-    ];
-
+    const sections = this.sectionService.getSectionIds();
     const scrollPosition = window.scrollY + 50; // Reduced offset for more sensitive detection
     let foundActiveSection = false;
 
@@ -78,12 +72,11 @@ export class App implements AfterViewInit {
     for (const sectionId of sections) {
       const element = document.getElementById(sectionId);
       if (element) {
-        // Check if the element is visible (not in a hidden tab)
         const rect = element.getBoundingClientRect();
-        
+
         console.log(`Section ${sectionId}: height=${rect.height}, top=${rect.top}, bottom=${rect.bottom}`);
-        
-        // Only consider elements that are actually visible (not in hidden tabs)
+
+        // Only consider elements that are actually visible (height > 0)
         if (rect.height > 0) {
           const elementTop = rect.top + window.scrollY;
           const elementBottom = elementTop + rect.height;
@@ -116,9 +109,9 @@ export class App implements AfterViewInit {
           const rect = element.getBoundingClientRect();
           const elementTop = rect.top + window.scrollY;
           const distance = Math.abs(scrollPosition - elementTop);
-          
+
           console.log(`Closest check - ${sectionId}: distance=${distance}`);
-          
+
           if (distance < closestDistance) {
             closestDistance = distance;
             closestSection = sectionId;
@@ -137,13 +130,18 @@ export class App implements AfterViewInit {
     console.log('=== scrollToSection called ===');
     console.log('sectionId:', sectionId);
     console.log('tabIndex:', tabIndex);
-    
+
+    // Clear any existing timeout
+    if (this.manualNavigationTimeout) {
+      clearTimeout(this.manualNavigationTimeout);
+    }
+
     // Set the active section immediately when clicking navigation
     this.activeSection.set(sectionId);
     this.isManualNavigation = true;
     this.isProgrammaticScroll = true;
     this.lastManualNavigationTime = Date.now(); // Record the time when navigation starts
-    
+
     // Clear the manual navigation flag after a shorter delay
     this.manualNavigationTimeout = setTimeout(() => {
       this.isManualNavigation = false;
@@ -151,17 +149,17 @@ export class App implements AfterViewInit {
       this.manualNavigationTimeout = null;
       console.log('Manual navigation flags cleared');
     }, 500); // Reduced to 500ms
-    
+
     // If a tab index is provided, switch to that tab first
     if (tabIndex !== undefined) {
       console.log('Switching to tab:', tabIndex);
-      
+
       // Update the active tab index
       this.activeTabIndex.set(tabIndex);
-      
+
       // Force change detection
       this.cdr.detectChanges();
-      
+
       // Wait for the tab to be visible, then scroll
       setTimeout(() => {
         console.log('About to scroll to element after tab switch...');
@@ -176,17 +174,17 @@ export class App implements AfterViewInit {
   private scrollToElement(sectionId: string): void {
     console.log('=== scrollToElement called ===');
     console.log('Looking for sectionId:', sectionId);
-    
+
     // Try to find the element
     let element = document.getElementById(sectionId);
     console.log('Element found globally:', !!element);
-    
+
     if (!element) {
       console.log('Element not found globally, checking tab panels...');
       // If not found, try to find it within any tab panel
       const tabPanels = document.querySelectorAll('.tab-panel');
       console.log('Found tab panels:', tabPanels.length);
-      
+
       for (const panel of tabPanels) {
         console.log('Checking panel:', panel);
         element = panel.querySelector(`#${sectionId}`);
@@ -196,26 +194,31 @@ export class App implements AfterViewInit {
         }
       }
     }
-    
+
     if (element) {
       console.log('Element found, scrolling to:', sectionId);
       console.log('Element rect:', element.getBoundingClientRect());
-      
-      element.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' // Changed from 'start' to 'center' for better visibility
+
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
       });
     } else {
       console.log('Element not found:', sectionId);
       // Try to find the element in the entire document
       const allElements = document.querySelectorAll('[id]');
       console.log('Available elements with IDs:', Array.from(allElements).map(el => el.id));
-      
+
       // Also log the active tab panel content
       const activeTabPanel = document.querySelector('.tab-panel.active');
       if (activeTabPanel) {
         console.log('Active tab panel content:', activeTabPanel.innerHTML);
       }
     }
+  }
+
+  // Handle navigation component events
+  onNavigationClick(event: {sectionId: string, tabIndex?: number}): void {
+    this.scrollToSection(event.sectionId, event.tabIndex);
   }
 }
