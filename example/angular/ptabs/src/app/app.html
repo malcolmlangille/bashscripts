@@ -68,33 +68,17 @@
 
       <h2 class="text-3xl font-semibold text-center mb-8 text-gray-800">{{ title() }}</h2>
 
-      <!-- Custom Tabs Implementation -->
-      <div class="border border-gray-200 rounded-lg overflow-hidden font-sans">
-        <div class="bg-gray-50 border-b border-gray-200 flex">
-          <div class="px-5 py-3 cursor-pointer border-r border-gray-200 bg-transparent transition-colors duration-200 font-medium text-gray-600 hover:bg-gray-100"
-               [class.bg-white]="activeTabIndex() === 0"
-               [class.text-blue-600]="activeTabIndex() === 0"
-               [class.border-b-2]="activeTabIndex() === 0"
-               [class.border-blue-600]="activeTabIndex() === 0"
-               (click)="activeTabIndex.set(0)">
-            Details
-          </div>
-          <div class="px-5 py-3 cursor-pointer border-r border-gray-200 bg-transparent transition-colors duration-200 font-medium text-gray-600 hover:bg-gray-100"
-               [class.bg-white]="activeTabIndex() === 1"
-               [class.text-blue-600]="activeTabIndex() === 1"
-               [class.border-b-2]="activeTabIndex() === 1"
-               [class.border-blue-600]="activeTabIndex() === 1"
-               (click)="activeTabIndex.set(1)">
-            History
-          </div>
-        </div>
-
-        <div class="bg-white p-5">
-          <div class="py-5" [class.hidden]="activeTabIndex() !== 0">
+      <!-- PrimeNG Tabs Implementation -->
+      <p-tabs [(value)]="activeTabIndex" [lazy]="false">
+        <p-tablist>
+          <p-tab [value]="0">Details</p-tab>
+          <p-tab [value]="1">History</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel [value]="0">
             <app-details></app-details>
-          </div>
-
-          <div class="py-5" [class.hidden]="activeTabIndex() !== 1">
+          </p-tabpanel>
+          <p-tabpanel [value]="1">
             <h3 class="text-xl font-semibold text-gray-800 mb-4">History Tab</h3>
             <p class="text-gray-600 leading-relaxed mb-5">This is the history tab content. You can display historical data here.</p>
 
@@ -153,9 +137,9 @@
                 user-friendly.
               </p>
             </div>
-          </div>
-        </div>
-      </div>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
     </div>
   </div>
 

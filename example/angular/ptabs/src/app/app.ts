@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { NavigationComponent, NavigationItem } from './navigation/navigation.component';
 import { SectionService } from './services/section.service';
 import { DetailsComponent } from './details/details.component';
+import { TabsModule } from 'primeng/tabs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent, DetailsComponent],
+  imports: [RouterOutlet, NavigationComponent, DetailsComponent, TabsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -161,11 +162,12 @@ export class App implements AfterViewInit {
       // Force change detection
       this.cdr.detectChanges();
 
-      // Wait for the tab to be visible, then scroll
+      // Wait longer for the tab to be visible, then scroll
       setTimeout(() => {
         console.log('About to scroll to element after tab switch...');
+        console.log('Current active tab index:', this.activeTabIndex());
         this.scrollToElement(sectionId);
-      }, 100);
+      }, 200); // Increased delay to ensure tab switching completes
     } else {
       console.log('No tab index provided, scrolling directly...');
       this.scrollToElement(sectionId);
@@ -183,7 +185,8 @@ export class App implements AfterViewInit {
     if (!element) {
       console.log('Element not found globally, checking tab panels...');
       // If not found, try to find it within any tab panel
-      const tabPanels = document.querySelectorAll('.tab-panel');
+      // Try multiple possible PrimeNG v20 selectors
+      const tabPanels = document.querySelectorAll('.p-tabpanel, .p-tabs-panel, [data-pc-name="tabpanel"]');
       console.log('Found tab panels:', tabPanels.length);
 
       for (const panel of tabPanels) {
@@ -210,8 +213,8 @@ export class App implements AfterViewInit {
       const allElements = document.querySelectorAll('[id]');
       console.log('Available elements with IDs:', Array.from(allElements).map(el => el.id));
 
-      // Also log the active tab panel content
-      const activeTabPanel = document.querySelector('.tab-panel.active');
+      // Also log the active tab panel content - try multiple selectors
+      const activeTabPanel = document.querySelector('.p-tabpanel-active, .p-tabs-panel-active, [data-pc-name="tabpanel"][aria-hidden="false"]');
       if (activeTabPanel) {
         console.log('Active tab panel content:', activeTabPanel.innerHTML);
       }
