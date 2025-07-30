@@ -1,215 +1,284 @@
-<div class="main-layout">
-  <div class="content-area">
-    <div class="container">
-      <div class="main-section">
-        <h1 class="main-title">Welcome to Our Application</h1>
-        <p class="main-description">
-          This is a comprehensive application that demonstrates the use of PrimeNG components. 
-          Below you'll find tabs with detailed information and a navigation panel on the right 
+<div class="flex min-h-screen gap-5">
+  <div class="flex-1 p-5 overflow-y-auto">
+    <div class="max-w-4xl mx-auto p-5">
+      <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-10 rounded-xl mb-8 shadow-lg">
+        <h1 class="text-4xl font-bold mb-5 text-center text-white">
+          Welcome to Our Application
+        </h1>
+        <p class="text-lg leading-relaxed mb-6 text-center opacity-95">
+          This is a comprehensive application that demonstrates the use of PrimeNG components.
+          Below you'll find tabs with detailed information and a navigation panel on the right
           to help you explore different features and functionalities.
         </p>
-        
-        <div class="main-features" id="key-features">
-          <h3>Key Features:</h3>
-          <ul>
-            <li>Interactive tabs with smooth transitions</li>
-            <li>Responsive design that works on all devices</li>
-            <li>Modern UI components from PrimeNG</li>
-            <li>Clean and professional styling</li>
+
+        <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm mb-6" id="key-features">
+          <h3 class="text-xl font-semibold mb-4 text-white">Key Features:</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Interactive tabs with smooth transitions
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Responsive design that works on all devices
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Modern UI components from PrimeNG
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Clean and professional styling
+            </li>
           </ul>
         </div>
-        
-        <div class="main-features" id="technical-implementation">
-          <h3>Technical Implementation:</h3>
-          <ul>
-            <li>Angular 20 with standalone components</li>
-            <li>PrimeNG integration for UI components</li>
-            <li>Flexbox layout for responsive design</li>
-            <li>Custom CSS styling for enhanced appearance</li>
+
+        <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm mb-6" id="technical-implementation">
+          <h3 class="text-xl font-semibold mb-4 text-white">Technical Implementation:</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Angular 20 with standalone components
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              PrimeNG integration for UI components
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Flexbox layout for responsive design
+            </li>
+            <li class="flex items-center text-white/90 border-b border-white/20 pb-2 last:border-b-0">
+              <span class="text-green-400 font-bold mr-3">✓</span>
+              Custom CSS styling for enhanced appearance
+            </li>
           </ul>
         </div>
-        
-        <div class="main-features" id="notes">
-          <h3>Notes:</h3>
-          <p>
-            This application serves as a demonstration of modern web development practices using Angular 
-            and PrimeNG. The modular architecture allows for easy maintenance and future enhancements. 
-            The design prioritizes user experience with intuitive navigation and clean visual presentation. 
+
+        <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm" id="notes">
+          <h3 class="text-xl font-semibold mb-4 text-white">Notes:</h3>
+          <p class="text-white/90 leading-relaxed">
+            This application serves as a demonstration of modern web development practices using Angular
+            and PrimeNG. The modular architecture allows for easy maintenance and future enhancements.
+            The design prioritizes user experience with intuitive navigation and clean visual presentation.
             All components are fully responsive and follow accessibility best practices.
           </p>
         </div>
       </div>
-      
-      <h2 class="section-title">{{ title() }}</h2>
 
-      <div class="custom-tabs">
-        <div class="tab-headers">
-          <div class="tab-header" 
-               [class.active]="activeTabIndex() === 0"
+      <h2 class="text-3xl font-semibold text-center mb-8 text-gray-800">{{ title() }}</h2>
+
+      <!-- Custom Tabs Implementation -->
+      <div class="border border-gray-200 rounded-lg overflow-hidden font-sans">
+        <div class="bg-gray-50 border-b border-gray-200 flex">
+          <div class="px-5 py-3 cursor-pointer border-r border-gray-200 bg-transparent transition-colors duration-200 font-medium text-gray-600 hover:bg-gray-100"
+               [class.bg-white]="activeTabIndex() === 0"
+               [class.text-blue-600]="activeTabIndex() === 0"
+               [class.border-b-2]="activeTabIndex() === 0"
+               [class.border-blue-600]="activeTabIndex() === 0"
                (click)="activeTabIndex.set(0)">
             Details
           </div>
-          <div class="tab-header" 
-               [class.active]="activeTabIndex() === 1"
+          <div class="px-5 py-3 cursor-pointer border-r border-gray-200 bg-transparent transition-colors duration-200 font-medium text-gray-600 hover:bg-gray-100"
+               [class.bg-white]="activeTabIndex() === 1"
+               [class.text-blue-600]="activeTabIndex() === 1"
+               [class.border-b-2]="activeTabIndex() === 1"
+               [class.border-blue-600]="activeTabIndex() === 1"
                (click)="activeTabIndex.set(1)">
             History
           </div>
         </div>
-        
-        <div class="tab-content-container">
-          <div class="tab-panel" [class.active]="activeTabIndex() === 0">
-            <div class="tab-content">
-              <h3>Details Tab</h3>
-              <p>This is the details tab content. You can add any information here.</p>
-              
-              <div class="details-section" id="project-overview">
-                <h4>Project Overview</h4>
-                <p>
-                  This Angular application showcases the integration of PrimeNG components to create a modern, 
-                  responsive user interface. The project demonstrates best practices in component architecture, 
-                  styling, and user experience design. Built with Angular 20 and PrimeNG, it provides a solid 
-                  foundation for building enterprise-level applications with rich UI components.
-                </p>
-              </div>
-              
-              <div class="details-section" id="technical-architecture">
-                <h4>Technical Architecture</h4>
-                <p>
-                  The application follows Angular's component-based architecture with standalone components 
-                  and modern dependency injection patterns. PrimeNG components are seamlessly integrated 
-                  to provide consistent styling and behavior across the application. The modular structure 
-                  allows for easy maintenance and scalability as the application grows.
-                </p>
-              </div>
-              
-              <div class="details-section" id="user-interface-design">
-                <h4>User Interface Design</h4>
-                <p>
-                  The interface design emphasizes clarity and usability with a clean, professional appearance. 
-                  The layout uses flexbox for responsive design, ensuring optimal viewing across different 
-                  screen sizes. Color schemes and typography are carefully chosen to enhance readability 
-                  and create a pleasant user experience.
-                </p>
-              </div>
-              
-              <div class="details-section" id="component-integration">
-                <h4>Component Integration</h4>
-                <p>
-                  PrimeNG tabs component is integrated with custom styling to match the application's design 
-                  language. The navigation panel provides easy access to different sections while maintaining 
-                  visual consistency. All components are properly configured with appropriate imports and 
-                  follow Angular's best practices for component communication.
-                </p>
-              </div>
-              
-              <div class="details-section" id="future-enhancements">
-                <h4>Future Enhancements</h4>
-                <p>
-                  Planned enhancements include additional PrimeNG components such as data tables, forms, 
-                  and advanced navigation features. The modular architecture allows for easy addition of 
-                  new features while maintaining code quality and performance. User feedback will drive 
-                  the prioritization of new features and improvements.
-                </p>
-              </div>
+
+        <div class="bg-white p-5">
+          <div class="py-5" [class.hidden]="activeTabIndex() !== 0">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Details Tab</h3>
+            <p class="text-gray-600 leading-relaxed mb-5">This is the details tab content. You can add any information here.</p>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="project-overview">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Project Overview</h4>
+              <p class="text-gray-600 leading-relaxed">
+                This Angular application showcases the integration of PrimeNG components to create a modern,
+                responsive user interface. The project demonstrates best practices in component architecture,
+                styling, and user experience design. Built with Angular 20 and PrimeNG, it provides a solid
+                foundation for building enterprise-level applications with rich UI components.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="technical-architecture">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Technical Architecture</h4>
+              <p class="text-gray-600 leading-relaxed">
+                The application follows Angular's component-based architecture with standalone components
+                and modern dependency injection patterns. PrimeNG components are seamlessly integrated
+                to provide consistent styling and behavior across the application. The modular structure
+                allows for easy maintenance and scalability as the application grows.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="user-interface-design">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">User Interface Design</h4>
+              <p class="text-gray-600 leading-relaxed">
+                The interface design emphasizes clarity and usability with a clean, professional appearance.
+                The layout uses flexbox for responsive design, ensuring optimal viewing across different
+                screen sizes. Color schemes and typography are carefully chosen to enhance readability
+                and create a pleasant user experience.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="component-integration">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Component Integration</h4>
+              <p class="text-gray-600 leading-relaxed">
+                PrimeNG tabs component is integrated with custom styling to match the application's design
+                language. The navigation panel provides easy access to different sections while maintaining
+                visual consistency. All components are properly configured with appropriate imports and
+                follow Angular's best practices for component communication.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="future-enhancements">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Future Enhancements</h4>
+              <p class="text-gray-600 leading-relaxed">
+                Planned enhancements include additional PrimeNG components such as data tables, forms,
+                and advanced navigation features. The modular architecture allows for easy addition of
+                new features while maintaining code quality and performance. User feedback will drive
+                the prioritization of new features and improvements.
+              </p>
             </div>
           </div>
-          
-          <div class="tab-panel" [class.active]="activeTabIndex() === 1">
-            <div class="tab-content">
-              <h3>History Tab</h3>
-              <p>This is the history tab content. You can display historical data here.</p>
-              
-              <div class="history-section" id="recent-activity">
-                <h4>Recent Activity</h4>
-                <p>
-                  The application has been actively developed with regular updates and improvements. 
-                  Recent changes include the integration of PrimeNG components, implementation of responsive 
-                  design patterns, and enhancement of user interface elements. Each update focuses on 
-                  improving user experience while maintaining code quality and performance standards.
-                </p>
-                <div class="history-item">
-                  <span class="date">2024-01-15</span>
-                  <span class="action">Action performed</span>
-                </div>
-                <div class="history-item">
-                  <span class="date">2024-01-14</span>
-                  <span class="action">Another action</span>
-                </div>
-                <div class="history-item">
-                  <span class="date">2024-01-13</span>
-                  <span class="action">Previous activity</span>
-                </div>
+
+          <div class="py-5" [class.hidden]="activeTabIndex() !== 1">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">History Tab</h3>
+            <p class="text-gray-600 leading-relaxed mb-5">This is the history tab content. You can display historical data here.</p>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="recent-activity">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h4>
+              <p class="text-gray-600 leading-relaxed mb-4">
+                The application has been actively developed with regular updates and improvements.
+                Recent changes include the integration of PrimeNG components, implementation of responsive
+                design patterns, and enhancement of user interface elements. Each update focuses on
+                improving user experience while maintaining code quality and performance standards.
+              </p>
+              <div class="flex justify-between py-2 border-b border-gray-200">
+                <span class="font-semibold text-gray-700">2024-01-15</span>
+                <span class="text-gray-600">Action performed</span>
               </div>
-              
-              <div class="history-section" id="development-timeline">
-                <h4>Development Timeline</h4>
-                <p>
-                  The project began as a simple Angular application and has evolved into a comprehensive 
-                  demonstration of modern web development practices. The development timeline shows a clear 
-                  progression from basic functionality to advanced features, including the integration of 
-                  third-party libraries, implementation of complex UI components, and adoption of best 
-                  practices for maintainable code architecture.
-                </p>
+              <div class="flex justify-between py-2 border-b border-gray-200">
+                <span class="font-semibold text-gray-700">2024-01-14</span>
+                <span class="text-gray-600">Another action</span>
               </div>
-              
-              <div class="history-section" id="version-history">
-                <h4>Version History</h4>
-                <p>
-                  Multiple versions have been released throughout the development process, each bringing 
-                  new features and improvements. The version history reflects the iterative approach to 
-                  development, with each release building upon previous work while addressing user feedback 
-                  and technical requirements. This approach ensures continuous improvement and adaptation 
-                  to changing needs and technologies.
-                </p>
+              <div class="flex justify-between py-2">
+                <span class="font-semibold text-gray-700">2024-01-13</span>
+                <span class="text-gray-600">Previous activity</span>
               </div>
-              
-              <div class="history-section" id="user-feedback-integration">
-                <h4>User Feedback Integration</h4>
-                <p>
-                  User feedback has played a crucial role in shaping the application's development. 
-                  Regular reviews and testing sessions have provided valuable insights into user needs 
-                  and preferences. This feedback has been systematically integrated into the development 
-                  process, resulting in improvements to usability, accessibility, and overall user 
-                  experience. The iterative feedback loop ensures the application remains relevant and 
-                  user-friendly.
-                </p>
-              </div>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="development-timeline">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Development Timeline</h4>
+              <p class="text-gray-600 leading-relaxed">
+                The project began as a simple Angular application and has evolved into a comprehensive
+                demonstration of modern web development practices. The development timeline shows a clear
+                progression from basic functionality to advanced features, including the integration of
+                third-party libraries, implementation of complex UI components, and adoption of best
+                practices for maintainable code architecture.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="version-history">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">Version History</h4>
+              <p class="text-gray-600 leading-relaxed">
+                Multiple versions have been released throughout the development process, each bringing
+                new features and improvements. The version history reflects the iterative approach to
+                development, with each release building upon previous work while addressing user feedback
+                and technical requirements. This approach ensures continuous improvement and adaptation
+                to changing needs and technologies.
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-5 rounded-lg mt-5" id="user-feedback-integration">
+              <h4 class="text-lg font-semibold text-gray-700 mb-4">User Feedback Integration</h4>
+              <p class="text-gray-600 leading-relaxed">
+                User feedback has played a crucial role in shaping the application's development.
+                Regular reviews and testing sessions have provided valuable insights into user needs
+                and preferences. This feedback has been systematically integrated into the development
+                process, resulting in improvements to usability, accessibility, and overall user
+                experience. The iterative feedback loop ensures the application remains relevant and
+                user-friendly.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="sidebar">
-    <div class="sidebar-panel">
-      <div class="sidebar-header">
-        <h3>Navigation</h3>
+
+  <div class="w-72 p-5 bg-gray-50 border-l border-gray-200 sticky top-0 h-screen overflow-y-auto">
+    <div class="border border-gray-200 rounded-lg bg-white overflow-hidden">
+      <div class="bg-gray-50 px-5 py-4 border-b border-gray-200 font-semibold text-gray-700">
+        <h3 class="text-base font-semibold m-0">Navigation</h3>
       </div>
-      <div class="nav-menu">
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'key-features'"
+      <div class="flex flex-col relative">
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'key-features'"
+             [class.text-blue-600]="activeSection() === 'key-features'"
+             [class.font-semibold]="activeSection() === 'key-features'"
+             [class.border-l-4]="activeSection() === 'key-features'"
+             [class.border-blue-600]="activeSection() === 'key-features'"
+             [class.pl-4]="activeSection() === 'key-features'"
              (click)="scrollToSection('key-features')">Key Features</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'technical-implementation'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'technical-implementation'"
+             [class.text-blue-600]="activeSection() === 'technical-implementation'"
+             [class.font-semibold]="activeSection() === 'technical-implementation'"
+             [class.border-l-4]="activeSection() === 'technical-implementation'"
+             [class.border-blue-600]="activeSection() === 'technical-implementation'"
+             [class.pl-4]="activeSection() === 'technical-implementation'"
              (click)="scrollToSection('technical-implementation')">Technical Implementation</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'notes'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'notes'"
+             [class.text-blue-600]="activeSection() === 'notes'"
+             [class.font-semibold]="activeSection() === 'notes'"
+             [class.border-l-4]="activeSection() === 'notes'"
+             [class.border-blue-600]="activeSection() === 'notes'"
+             [class.pl-4]="activeSection() === 'notes'"
              (click)="scrollToSection('notes')">Notes</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'project-overview'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'project-overview'"
+             [class.text-blue-600]="activeSection() === 'project-overview'"
+             [class.font-semibold]="activeSection() === 'project-overview'"
+             [class.border-l-4]="activeSection() === 'project-overview'"
+             [class.border-blue-600]="activeSection() === 'project-overview'"
+             [class.pl-4]="activeSection() === 'project-overview'"
              (click)="scrollToSection('project-overview', 0)">Project Overview</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'technical-architecture'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'technical-architecture'"
+             [class.text-blue-600]="activeSection() === 'technical-architecture'"
+             [class.font-semibold]="activeSection() === 'technical-architecture'"
+             [class.border-l-4]="activeSection() === 'technical-architecture'"
+             [class.border-blue-600]="activeSection() === 'technical-architecture'"
+             [class.pl-4]="activeSection() === 'technical-architecture'"
              (click)="scrollToSection('technical-architecture', 0)">Technical Architecture</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'user-interface-design'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'user-interface-design'"
+             [class.text-blue-600]="activeSection() === 'user-interface-design'"
+             [class.font-semibold]="activeSection() === 'user-interface-design'"
+             [class.border-l-4]="activeSection() === 'user-interface-design'"
+             [class.border-blue-600]="activeSection() === 'user-interface-design'"
+             [class.pl-4]="activeSection() === 'user-interface-design'"
              (click)="scrollToSection('user-interface-design', 0)">User Interface Design</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'component-integration'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'component-integration'"
+             [class.text-blue-600]="activeSection() === 'component-integration'"
+             [class.font-semibold]="activeSection() === 'component-integration'"
+             [class.border-l-4]="activeSection() === 'component-integration'"
+             [class.border-blue-600]="activeSection() === 'component-integration'"
+             [class.pl-4]="activeSection() === 'component-integration'"
              (click)="scrollToSection('component-integration', 0)">Component Integration</div>
-        <div class="nav-item" 
-             [class.active]="activeSection() === 'future-enhancements'"
+        <div class="px-4 py-3 cursor-pointer border-b border-gray-200 transition-all duration-200 text-sm text-gray-600 relative pl-5 hover:bg-gray-100"
+             [class.bg-gray-50]="activeSection() === 'future-enhancements'"
+             [class.text-blue-600]="activeSection() === 'future-enhancements'"
+             [class.font-semibold]="activeSection() === 'future-enhancements'"
+             [class.border-l-4]="activeSection() === 'future-enhancements'"
+             [class.border-blue-600]="activeSection() === 'future-enhancements'"
+             [class.pl-4]="activeSection() === 'future-enhancements'"
              (click)="scrollToSection('future-enhancements', 0)">Future Enhancements</div>
       </div>
     </div>
