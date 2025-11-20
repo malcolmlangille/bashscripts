@@ -1,0 +1,101 @@
+# ================================
+#   Git Bash .bashrc (Windows)
+# ================================
+
+# ---- Source global definitions --------------------------------------------
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# ---- Add ~/.local/bin and ~/bin to PATH safely -----------------------------
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+export PATH
+
+# ---- Git Prompt (Windows Git Bash) -----------------------------------------
+# Try a few common locations for git-prompt.sh
+for _gp in \
+    "/c/Program Files/Git/mingw64/share/git/completion/git-prompt.sh" \
+    "/mingw64/share/git/completion/git-prompt.sh" \
+    "/usr/share/git/completion/git-prompt.sh" \
+    "/c/Program Files/Git/etc/profile.d/git-prompt.sh" \
+    "/etc/profile.d/git-prompt.sh"
+do
+    if [ -f "$_gp" ]; then
+        . "$_gp"
+        break
+    fi
+done
+unset _gp
+
+# ---- historyg - search history and highlight matches ------------------------
+historyg() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: historyg <search_word>"
+        return 1
+    fi
+    history | grep --color=always -i "$1"
+}
+
+# ---- lazygit - quick commit & push -----------------------------------------
+lazygit() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: lazygit \"commit message\""
+        return 1
+    fi
+    git add -A
+    git commit -m "$1"
+    git push
+}
+
+# ---- setgitemail - update global git name/email ----------------------------
+setgitemail() {
+    if [[ -z "$1" || -z "$2" ]]; then
+        echo "Usage: setgitemail \"Your Name\" \"your.email@example.com\""
+        return 1
+    fi
+
+    git config --global user.name "$1"
+    git config --global user.email "$2"
+
+    echo "Updated global git settings:"
+    git config --global user.name
+    git config --global user.email
+}
+
+# ---- Dynamic PS1 via PROMPT_COMMAND ----------------------------------------
+# Line 1: [date time] /path [branch]
+# Line 2: $
+_update_ps1() {
+    local git_branch=""
+    local now=""
+
+    # Current date/time in "4:31pm" format
+    now="$(date +"%Y-%m-%d %-I:%M%P")"
+
+    # Capture branch name
+    if type __git_ps1 >/dev/null 2>&1; then
+        git_branch="$(__git_ps1 '%s')"
+    fi
+
+    # Red (not bold) (branch)
+    if [[ -n "$git_branch" ]]; then
+        git_branch=" \[\e[31m\](${git_branch})\[\e[0m\]"
+    fi
+
+    # Cyan [date time] + green path + branch + newline + $
+    PS1="\[\e[36m\][${now}]\[\e[0m\] \[\e[01;32m\]\w\[\e[0m\]${git_branch}\n\$ "
+}
+
+PROMPT_COMMAND=_update_ps1
+
+# Enable color output for ls in Git Bash
+export LS_COLORS="di=01;34:ln=01;36:so=01;35:pi=33:ex=01;32:bd=34;46:cd=34;43:su=37;41:sg=30;43:tw=30;42:ow=34;42"
+
+alias ls='ls --color=auto'
